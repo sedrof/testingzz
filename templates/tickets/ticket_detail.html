@@ -1,0 +1,85 @@
+{% extends "includes/base.html" %}
+
+{% block title %}Tickets - Details of ticket #{{ ticket.id }}{% endblock %}
+
+{% block content %}
+
+<div class="dropdown" style="float: right; margin-top: -50px; margin-right: 20px;">
+
+
+
+
+</div>
+
+<div class="page-header">
+    <h1>Ticket #{{ ticket.id }}</h1>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+
+        <style>
+            .description {
+                background: #EEE;
+            }
+        </style>
+
+        <table class="ui table">
+            <div>
+                <tr>
+                    <td class="description"><b>Status</b></td>
+                    <td>{{ ticket.status }}</td>
+                </tr>
+                <tr>
+                    <td class="description"><b>Created at</b></td>
+                    <td>{{ ticket.created }}</td>
+                </tr>
+                <tr>
+                    <td class="description"><b>Crreated by</b></td>
+                    <td>{{ ticket.created_by }}</td>
+                </tr>
+                <tr>
+                    <td width="180px" class="description"><b>Title</b></td>
+                    <td>{{ ticket.title }}</td>
+                </tr>
+                <tr>
+                    <td class="description"><b>Description</b></td>
+                    <td>{{ ticket.description}}</td>
+                </tr>
+            </div>
+
+            {% for f in ticket.ticket.all %}
+            <div>
+                <tr>
+
+                    <td style="width:19%; background-color:red; color:white;" class="description"><b>Reply from : {{
+                            f.created_by }}</b></td>
+
+                    <td style="width:19%; color:white; background-color:red;">{{ f.message}}</td>
+                </tr>
+                {% endfor %}
+            </div>
+        </table>
+        <div class="reply">
+            <h1>
+                Add a Reply
+            </h1>
+        </div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8 col-sm-10">
+                    <form action="{% url 'ticket_detail' pk=ticket.id %}" method="post">
+                        {% csrf_token %}
+                        {% include 'includes/form.html' %}
+                        <input style="position:absolute; margin-top:10%;" class="btn btn-primary" type="submit"
+                            value="Save Ticket" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    {% endblock %}

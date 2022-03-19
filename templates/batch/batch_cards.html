@@ -1,0 +1,101 @@
+
+{% extends "includes/base.html" %}
+
+{% block title %}
+Batches - All Batches
+
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-2">
+        <form>
+            <div class="input-group">
+                <input name="q" type="text" placeholder="Search with batch name" class="form-control form-control-lg" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary btn-lg">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+    <div class="headers" style="display: flex;">
+        <div class="page-header"><h1>Cards For Batch: {{batch.batch.name}}</h1></div>
+        
+    </div>
+    
+
+    
+<table class="ui red table">
+    <thead>
+      <tr>
+        <th >Serial</th>
+        <th >cvv</th>
+        <th >Expiry Date</th>
+        <th >Seller</th>
+        <th >Country</th>
+        <th >Price</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for card in page.object_list %}
+        {% if card.batch.status != 'Working' %}
+      <tr class="warning">
+        <td>
+        {{ card.card_first_chars }}
+        </td>
+        <td>{{ card.cvv }}</td>
+        <td>{{ card.expiry_date }}</td>
+        <td >{{ card.seller.username }}</td>
+        <td >{{ card.country }}</td>
+        <td >{{ card.price }}</td>
+      </tr>
+      {% else %}
+      <tr >
+        <td>
+            {{ card.card_first_chars }}
+            </td>
+            <td>{{ card.cvv }}</td>
+            <td>{{ card.expiry_date }}</td>
+            <td >{{ card.seller.username }}</td>
+            <td >{{ card.country }}</td>
+            <td >{{ card.price }}</td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+      <tr class="warning">
+          <td>Batch Total Price</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>batch_total_price</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-links" style ="position:absolute;">
+    <div class="ui borderless menu" style="height: 50px;">
+       
+    {% if page.has_previous %}
+    <a style="margin-right: 5%; background-color:#1e6de3; color: white;"class="item" href="{% url 'batch_detail' pk=batch.batch.id %}?page=1"> First <br> <i class="angle double left icon"></i> </a>
+    <a style=" margin-right: 5%; background-color:#1e6de3; color: white;" class="item" href="{% url 'batch_detail' pk=batch.batch.id %}?page={{ page.previous_page_number }}"> Previous<i class="angle left icon"></i> </a>
+    {% endif %}
+    {% if page.has_next %}
+    <a style=" margin-right: 5%; background-color:#1e6de3; color: white;" class="item" href="{% url 'batch_detail' pk=batch.batch.id  %}?page={{ page.next_page_number }}"> Next<i class="angle right icon"></i> </a>
+    <a style="background-color:#1e6de3; color: white;" class="item" href="{% url 'batch_detail' pk=batch.batch.id %}?page={{ num_pages }}"> Last <i class="angle double right icon"></i> </a>
+    {% endif %}
+    </div>
+    
+  </div>
+
+  
+    </div>
+    <div class="page-header" style="margin-left: 91%; "><h1 style="font-size:16px">{{page}}</h1></div>
+</div>
+
+{% endblock %}

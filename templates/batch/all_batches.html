@@ -1,0 +1,133 @@
+
+{% extends "includes/base.html" %}
+
+{% block title %}
+Batches - All Batches
+
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-2">
+        <form>
+            <div class="input-group">
+                <input name="q" type="text" placeholder="Search with batch name" class="form-control form-control-lg" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary btn-lg">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+      {% include "includes/messages.html"%}
+
+
+    <div class="page-header"><h1>All Batches</h1></div>
+
+    
+<table class="ui red table">
+    <thead>
+      <tr>
+        <th >Batch</th>
+        <th >Status</th>
+        <th >Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for batch in page.object_list %}
+        {% if batch.status != 'Working' %}
+      <tr class="warning">
+        <td>
+            <a href="{% url 'batch_detail' pk=batch.id %}">{{ batch.name }}</a>
+        </td>
+        <td>{{ batch.status }}</td>
+        <td >
+            <div class="ui compact menu">
+                <div class="ui simple dropdown item">
+                  Chose Action
+                  <i class="dropdown icon"></i>
+                  <div class="menu">
+                    <div class="item">
+                       <form action="{% url 'batch_edit' pk=batch.id %}" method="post">
+                      {% csrf_token %}
+                      
+                      <button class="btn btn-primary" href="{% url 'batch_edit' pk=batch.id %}">Change Status</button>
+                       </form>
+                      </div>
+
+                    <div class="item"> <form action="{% url 'batch_delete' pk=batch.id %}" method="post">
+                      {% csrf_token %}
+                      
+                      <button class="btn btn-danger" href="{% url 'batch_delete' pk=batch.id %}">Delete Batch</button>
+                       </form>
+                      </div>
+                    
+    
+                  </div>
+                </div>
+              </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr >
+        <td>
+            <a href="{% url 'batch_detail' pk=batch.id %}">{{ batch.name }}</a>
+        </td>
+        <td>{{ batch.status }}</td>
+        <td >
+            <div class="ui compact menu">
+                <div class="ui simple dropdown item">
+                  Chose Action
+                  <i class="dropdown icon">
+                      
+                  </i>
+                  <div class="menu">
+                    <div class="item"> <form action="{% url 'batch_edit' pk=batch.id %}" method="post">
+                      {% csrf_token %}
+                      
+                      <button class="btn btn-primary" href="{% url 'batch_edit' pk=batch.id %}">Change Status</button>
+                       </form>
+                      </div>
+
+                    <div class="item"> <form action="{% url 'batch_delete' pk=batch.id %}" method="post">
+                      {% csrf_token %}
+                      
+                      <button class="btn btn-danger" href="{% url 'batch_delete' pk=batch.id %}">Delete Batch</button>
+                       </form>
+                      </div>
+                    
+    
+                  </div>
+                </div>
+              </div>
+        </td>
+    </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- <div class="page-links" style ="position:absolute;">
+    <div class="ui borderless menu" style="height: 50px;">
+       
+    {% if page.has_previous %}
+    <a style="margin-right: 5%; background-color:#1e6de3; color: white;"class="item" href="{% url 'all_batchs' %}?page=1"> First <br> <i class="angle double left icon"></i> </a>
+    <a style=" margin-right: 5%; background-color:#1e6de3; color: white;" class="item" href="{% url 'all_batchs' %}?page={{ page.previous_page_number }}"> Previous<i class="angle left icon"></i> </a>
+    {% endif %}
+    {% if page.has_next %}
+    <a style=" margin-right: 5%; background-color:#1e6de3; color: white;" class="item" href="{% url 'all_batchs' %}?page={{ page.next_page_number }}"> Next<i class="angle right icon"></i> </a>
+    <a style="background-color:#1e6de3; color: white;" class="item" href="{% url 'all_batchs' %}?page={{ num_pages }}"> Last <i class="angle double right icon"></i> </a>
+    {% endif %}
+    </div>
+  </div> -->
+
+  
+    </div>
+</div>
+
+{% endblock %}

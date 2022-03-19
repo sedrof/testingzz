@@ -1,0 +1,28 @@
+{% extends "includes/base.html" %}
+
+{% block header_icon %}<i class="fa fa-pencil-square-o fa-5x"></i>{% endblock %}
+{% block headline %}{% if 'edit' in request.path %}Edit ticket{% else %}Create new ticket{% endif %}{% endblock %}
+{% block head-message %}Please fill out the form below{% endblock %}
+
+{% block title %}{% if 'edit' in request.path %}Tickets - Edit ticket{% else %}Tickets - Create new ticket{% endif %}{% endblock %}
+
+{% block content %}
+
+
+
+    <div class="page-header"><h1>Edit Ticket</h1></div>
+    {% include "includes/messages.html"%}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-10">
+    <form action="#" method="post">
+        {% csrf_token %}
+        {% include 'includes/form.html' %}
+        <input style="position:absolute; margin-top:10%;" class="btn btn-primary" type="submit" value="Save Ticket" />
+    </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

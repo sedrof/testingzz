@@ -1,0 +1,57 @@
+
+{% extends "includes/base.html" %}
+
+{% block title %}
+Tickets - All tickets
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+
+        <a href="{% url 'ticket_new' %}"><button type="button" class="btn btn-primary" style="float: right; margin-top: 15px; margin-right: 00px;">Start New Ticket</button></a>
+
+    <div class="page-header"><h1>Contact Us</h1></div>
+
+    
+    <table class="ui table">
+    <thead>
+      <tr class="col-xs-5">
+        <th class="th-lg" >ID</th>
+        <th class="th-lg">Status</th>
+        <th class="th-lg">Title</th>
+        <th class="th-lg" class="col-xs-5">Description</th>
+        <th class="th-lg" class="col-xs-5">Closed At</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for ticket in tickets %}
+      <tr>
+        {% if user.is_superuser %}
+        <td><a href="{% url 'ticket_detail' pk=ticket.id %}">{{ ticket.id }}</a></td>
+        {% else %}
+        <td><a href="{% url 'ticket_detail' pk=ticket.id %}">{{ ticket.id }}</a></td>
+        {% endif %}
+        <td>
+            {{ ticket.status }}
+        </td>
+        <td>{{ ticket.title }}</td>
+        <td>{{ ticket.description }}</td>
+        {% if ticket.status == 'Closed' %}
+        <td>{{ ticket.closed_date }}</td>
+        {% else %}
+        <td>Still Pending</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  
+    </div>
+</div>
+
+{% endblock %}

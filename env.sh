@@ -1,0 +1,5 @@
+export DBHOST="seller"
+export DBUSER="midodoth"
+export DBNAME="seller"
+export DBPASS="Adnan123@11@"
+export SECRET_KEY="django-insecure-$3r4%7%3xh@0r86_^w45q85u8%o@s8-r@q3mf=1=7)_rtm!ix4"
