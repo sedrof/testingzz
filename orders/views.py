@@ -114,6 +114,10 @@ def make_order(request):
             credit.save()
             for c in card_ids:
                 card = CouponCard.objects.filter(id = c).first()
+                card_seller = card.seller
+                seller_creadit = Credit.objects.filter(owner=card_seller).first()
+                seller_creadit.credit += card.price
+                seller_creadit.save()
                 orders = Orders.objects.filter(card_id = c).first()
                 
                 card.seller = user

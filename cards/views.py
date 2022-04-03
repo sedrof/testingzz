@@ -73,8 +73,6 @@ def batch_detail_view(request, pk):
 
     # batch_total_price = [f.totals for f in Batch.objects.filter(id=pk)][0]
 
-
-
     return render(
         request,
         "batch/batch_cards.html",
@@ -146,12 +144,30 @@ def batch_delete_view(request, pk):
         },
     )
 
+
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 20
     page_size_query_param = "page_size"
     max_page_size = 20
 
+
 class CardsViewSet(viewsets.ModelViewSet):
+    queryset = CouponCard.objects.filter(batch__status="Working").filter(sold=False)
+    serializer_class = CardsSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["seller__username"]
+    pagination_class = LargeResultsSetPagination
+
+    # def get_queryset(self):
+    #     chp = self.request.body
+    #     print(chp)
+    #     if self.request.user.is_superuser:
+    #         return super().get_queryset()
+    #     else:
+    #         return super().get_queryset().filter(user=self.request.user)
+
+
+class Cards_SerialViewSet(viewsets.ModelViewSet):
     queryset = CouponCard.objects.filter(batch__status="Working").filter(sold=False)
     serializer_class = CardsSerializer
     filter_backends = [filters.SearchFilter]
@@ -164,11 +180,35 @@ class CardsViewSet(viewsets.ModelViewSet):
     #     if self.request.user.is_superuser:
     #         return super().get_queryset()
     #     else:
-    #         return super().get_queryset().filter(user=self.request.user)
+    #         return super().get_queryset().filter(serial__startswith='0123')
 
-    def destroy(self, request, *args, **kwargs):
-        trans = self.get_object()
-        print(trans.id, "chp")
-        # trans.is_active = False
-        # trans.save()
-        return Response(data="delete success")
+
+class Cards_PriceViewSet(viewsets.ModelViewSet):
+    queryset = CouponCard.objects.filter(batch__status="Working").filter(sold=False)
+    serializer_class = CardsSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["price"]
+    pagination_class = LargeResultsSetPagination
+
+
+class Cards_CountryViewSet(viewsets.ModelViewSet):
+    queryset = CouponCard.objects.filter(batch__status="Working").filter(sold=False)
+    serializer_class = CardsSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["country"]
+    pagination_class = LargeResultsSetPagination
+
+    # def price_func(price):
+    #     return price.objects.all()
+
+    # def get_queryset(self):
+    #     qs = super(Cards_PriceViewSet, self).get_queryset()
+    #     price_search = self.request.GET.get("search", None)
+    #     price = []
+
+    #     return qs.filter(price=price_search)
+
+        # if self.request.user.is_superuser:
+        #     return super().get_queryset()
+        # else:
+        #     return super().get_queryset().filter(serial__startswith="1")

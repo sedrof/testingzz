@@ -70,6 +70,8 @@ class CouponCard(models.Model):
     cvv = models.CharField(max_length=6, null=True, blank=True)
     sold = models.BooleanField(default=False)
     in_my_cart = models.BooleanField(default=False, null=True, blank=True)
+    country = models.CharField(max_length=26, null=True, blank=True)
+    price = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
         return str(self.serial)[0:6] + ": " + str(self.seller.username)
@@ -80,19 +82,37 @@ class CouponCard(models.Model):
         abstract = False
         db_table = "Coupon Card"
 
+    def save(self, *args, **kwargs):
+        country = Country.objects.filter(code=str(self.serial)[0:6])
+        country_name = ""
+        for c in country:
+            country_name += c.name
+        self.country = str(country_name) or 'Unknown'
+
+
+        if self.country == "UNITED STATES":
+            self.price = 5
+        elif self.country != "UNITED STATES" and self.country != 'Unknown':
+            self.price = 10
+        else:
+            self.price = 7
+
+        super(CouponCard, self).save(*args, **kwargs)
+
+
     @cached_property
     def batch_card(self):
         cards = Batch.objects.filter(name=self.batch.name)
         for card in cards:
             return card
 
-    @cached_property
-    def country(self):
-        country = Country.objects.filter(code=str(self.serial)[0:6])
-        country_name = ""
-        for c in country:
-            country_name += c.name
-        return str(country_name) or 'Unknown'
+    # @cached_property
+    # def country(self):
+    #     country = Country.objects.filter(code=str(self.serial)[0:6])
+    #     country_name = ""
+    #     for c in country:
+    #         country_name += c.name
+    #     return str(country_name) or 'Unknown'
 
     @cached_property
     def code(self):
@@ -106,16 +126,16 @@ class CouponCard(models.Model):
     def card_first_chars(self):
         return str(self.serial)[0:6] + "****"
 
-    @cached_property
-    def price(self):
-        if self.country == "UNITED STATES":
-            price = 5
-        elif self.country != "UNITED STATES" and self.country != None:
-            price = 10
-        else:
-            price = 7
+    # @cached_property
+    # def price(self):
+    #     if self.country == "UNITED STATES":
+    #         price = 5
+    #     elif self.country != "UNITED STATES" and self.country != 'Unknown':
+    #         price = 10
+    #     else:
+    #         price = 7
 
-        return price
+    #     return price
 
     # @cached_property
     # def batch_total_price(self):

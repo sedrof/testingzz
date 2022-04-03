@@ -1,11 +1,39 @@
-{% extends 'includes/base.html' %}
-{% block title %} Home {% endblock %}
+{% extends "includes/base.html" %}
 
+{% block header_icon %}<i class="fa fa-pencil-square-o fa-5x"></i>{% endblock %}
+{% block headline %}{% if 'edit' in request.path %}{% else %}{% endif %}{% endblock %}
+{% block head-message %}Please fill out the form below{% endblock %}
 
-{% block breadcrumb %}
-  <li class="breadcrumb-item active"></li>
-{% endblock %}
+{% block title %}home{% endblock %}
 
 {% block content %}
-<h3>home</h3>
-{%endblock%}
+
+
+
+    {% include "includes/messages.html"%}
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="container-md shadow p-3 mb-5 bg-body rounded">
+          {% for b in body %}
+          {{b.body|safe}}
+          {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -29,7 +29,7 @@ def handle_parameters_upload(request, file):
     return True
 
 
-def handle_parameters_upload_cards(request, file):
+def handle_parameters_upload_cards(request, file, usser):
 
     wb = openpyxl.load_workbook(file, read_only=True)
     first_sheet = wb.get_sheet_names()[0]
@@ -38,7 +38,15 @@ def handle_parameters_upload_cards(request, file):
     data = []
 
     for row in ws.iter_rows(min_row=2, max_row=ws.max_row):
-        user = Users.objects.filter(username=row[4].value).first()
+
+        country = Country.objects.filter(code=str(row[0].value)[0:6])
+        country_name = ""
+        for c in country:
+            country_name += c.name
+        
+
+
+        user = Users.objects.filter(username=usser).first()
         batchh, created = Batch.objects.update_or_create(
             name=row[3].value, status="Working"
         )
@@ -50,6 +58,14 @@ def handle_parameters_upload_cards(request, file):
         parameter.cvv = row[2].value
         parameter.batch = batch
         parameter.seller = user
+        parameter.country = str(country_name) or 'Unknown'
+
+        if parameter.country == "UNITED STATES":
+            parameter.price = 5
+        elif parameter.country != "UNITED STATES" and parameter.country != 'Unknown':
+            parameter.price = 10
+        else:
+            parameter.price = 7
 
         data.append(parameter)
     CouponCard.objects.bulk_create(data)
@@ -72,9 +88,11 @@ def model_form_upload(request):
 
 def model_form_upload_cards(request):
     if request.method == "POST" and request.FILES["upload-cards"]:
+        print(request.user, 'usssseeeeeeeee')
         upload = request.FILES["upload-cards"]
+        usser = request.user
         if upload:
-            x = handle_parameters_upload_cards(request, upload)
+            x = handle_parameters_upload_cards(request, upload, usser)
             messages.add_message(
                 request, messages.SUCCESS, "File Was Uploaded Successfully"
             )

@@ -4,7 +4,10 @@ from .views import *
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r"coco", CardsViewSet, basename="card")
+router.register(r"cards_seller", CardsViewSet, basename="card")
+router.register(r"cards_serial", Cards_SerialViewSet, basename="card")
+router.register(r"cards_price", Cards_PriceViewSet, basename="card")
+router.register(r"cards_country", Cards_CountryViewSet, basename="card")
 
 urlpatterns = [
     path('all-cards/', all_cards_view,name='all_cards'),

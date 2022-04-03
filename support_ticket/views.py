@@ -108,6 +108,7 @@ def ticket_edit_view(request, pk):
                     d.closed_date = timezone.now()
                     d.save()
                     credit = Credit.objects.filter(owner=d.created_by).first()
+                    print(credit, "creeeeeeeee")
                     credit.credit += d.requested_amount
                     credit.save()
                 if d.status == None or d.status == "IN PROGRESS":
@@ -130,6 +131,7 @@ def ticket_edit_view(request, pk):
             "form": form,
         },
     )
+
 
 # def ticket_reply_view(request, pk):
 
@@ -215,7 +217,9 @@ def ticket_detail_view(request, pk):
         break
     # print(message_reply, ' yyyyyyy')
 
-    return render(request, "tickets/ticket_detail.html", {"ticket": ticket, "form":form})
+    return render(
+        request, "tickets/ticket_detail.html", {"ticket": ticket, "form": form}
+    )
 
 
 @api_view(
@@ -248,4 +252,49 @@ class TicketsViewSet(viewsets.ModelViewSet):
     pagination_class = LargeResultsSetPagination
 
     def get_queryset(self):
-        return super().get_queryset().filter(created_by__username=self.request.user)
+        if self.request.user.is_superuser:
+            return super().get_queryset()
+        else:
+            return super().get_queryset().filter(created_by__username=self.request.user)
+
+
+@api_view(
+    [
+        "PUT",
+    ]
+)
+def add_ticket(request):
+    ticket_data = request.data
+    print(ticket_data, "tickets")
+    title = ticket_data["title"]
+    description = ticket_data["description"]
+    create = Ticket.objects.create(description=description, title=title, created_by=request.user)
+    create.save()
+    return Response({"status": status.HTTP_200_OK})
+@api_view(
+    [
+        "PUT",
+    ]
+)
+def delete_ticket(request):
+    ticket_data = request.data
+    print(ticket_data, "tickets")
+    ticket = Ticket.objects.get(id=ticket_data['card_ids']).delete()
+    return Response({"status": status.HTTP_200_OK})
+
+@api_view(
+    [
+        "PUT",
+    ]
+)
+def add_reply(request):
+    ticket_data = request.data
+    print(ticket_data, "tickets")
+    ticket = Ticket.objects.get(id=ticket_data['id'])
+    reply = Reply.objects.create(ticket=ticket, message=ticket_data['reply'], created_by=request.user)
+    reply.save()
+    # title = ticket_data["title"]
+    # description = ticket_data["description"]
+    # create = Reply.objects.create(description=description, title=title, created_by=request.user)
+    # create.save()
+    return Response({"status": status.HTTP_200_OK})

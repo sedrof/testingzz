@@ -2,7 +2,9 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MaxValueValidator
 from django.utils.functional import cached_property
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from sellers.models import Users
 
 
 
@@ -31,3 +33,8 @@ class Credit(models.Model):
         return str(self.owner.username) + ": " + str(self.credit)
     class Meta:
         db_table = 'credit'
+
+@receiver(post_save, sender=Users)
+def create_credit (sender, instance, created, **kwargs):
+    if created:
+        Credit.objects.create(owner=instance)

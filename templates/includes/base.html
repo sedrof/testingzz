@@ -42,26 +42,23 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <!-- <a style="color: white;" class="nav-link active" aria-current="page" href="#">Home</a> -->
-          <a style="color: white;" class="nav-link active" href="{% url 'all_batches' %}">RESELLER USER</a>
+
 
           {% if user.is_superuser %}
-          <a style="color: white;" class="nav-link active" href="{% url 'all-tickets' %}">SUPPORT TICKET (super
-            user)</a>
+          <a style="color: white;" class="nav-link active" href="{% url 'all_batches' %}">RESELLER USER</a>
+          <a style="color: white;" class="nav-link active" href="{% url 'all-tickets' %}">SUPPORT TICKET (superuser)</a>
+          <a style="color: white;" class="nav-link active" href="{% url 'create' %}">CREATE USER </a>
+          <a style="color: white;" class="nav-link active" href="{% url 'imports' %}">COUNTRY-IMPORTS </a>
+          <a style="color: white;" class="nav-link active" href="{% url 'all_payouts' %}">PAYOUT Admin </a>
           {% else %}
           <a style="color: white;" class="nav-link active" href="{% url 'my-tickets' %}">SUPPORT TICKET </a>
-          {% endif %}
           <a style="color: white;" class="nav-link active" href="{% url 'payout_new' %}">PAYOUT </a>
-          {% if user.is_superuser %}
-          <a style="color: white;" class="nav-link active" href="{% url 'create' %}">CREATE USER </a>
-
-          <a style="color: white;" class="nav-link active" href="{% url 'imports' %}">COUNTRY-IMPORTS </a>
-          <a style="color: white;" class="nav-link active" href="{% url 'imports_cards' %}">CARD-IMPORTS </a>
-          <a style="color: white;" class="nav-link active" href="{% url 'all_payouts' %}">PAYOUT USER </a>
           {% endif %}
+          <a style="color: white;" class="nav-link active" href="{% url 'imports_cards' %}">CARD-IMPORTS </a>
           <a style="color: white;" class="nav-link active" href="{% url 'password_change' %}">CHANGE PASSWORD </a>
 
           <a style="color: white; position:absolute; right:10; font-size: 15px; margin-bottom:80%px;"
-            class="nav-link active" href="{% url 'logout' %}">Log Out <br> <br> <h1>({{user}})</h1>
+            class="nav-link active" href="{% url 'logout' %}">Log Out ({{user}})</h1>
           </a>
         </div>
       </div>

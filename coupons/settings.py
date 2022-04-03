@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "django-insecure-$3r4%7%3xh@0r86_^w45q85u8%o@s8-r@q3mf=1=7)_rtm!ix4"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 if DEBUG:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
     SECRET_KEY = "django-insecure-$3r4%7%3xh@0r86_^w45q85u8%o@s8-r@q3mf=1=7)_rtm!ix4"
@@ -38,7 +38,7 @@ if DEBUG:
     DATABASES = {
         "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "test4",
+        "NAME": "test",
         "USER": "postgres",
         "PASSWORD": "hotmail12",
         "HOST": "localhost",
@@ -91,6 +91,8 @@ INSTALLED_APPS = [
     "payout",
     "orders",
     'wallet',
+    'ckeditor',
+    'homez',
     "rest_framework",
     "rest_framework.authtoken",
     "djoser",

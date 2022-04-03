@@ -61,9 +61,10 @@ class Users(AbstractBaseUser, PermissionsMixin):
         abstract = False
         db_table = 'auth_user'
 
-    # def save(self, *args, **kwargs):
-    #     self.password = make_password(self.password)
-    #     super(Users, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        self.password = make_password(self.password)
+        print(type(self.password))
+        super(Users, self).save(*args, **kwargs)
 
         
         
